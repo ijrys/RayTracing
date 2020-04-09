@@ -6,7 +6,7 @@ namespace Core.Materials {
 
 	public class Material {
 
-		public LightStrong BaseColor { get; set; } = new LightStrong(0.8f, 0.8f, 0.8f);
+		public LightStrong BaseColor { get; set; } = new LightStrong(0.25f, 0.25f, 0.25f);
 
 		public bool LightAble { get; set; }
 		public LightStrong LightColor { get; set; } = new LightStrong(0.8f, 0.8f, 0.8f);

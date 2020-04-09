@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Core {
 	public struct LightStrong {
-		float R, G, B;
+		public float R, G, B;
 		public LightStrong(float r, float g, float b) {
 			R = r;
 			G = g;
@@ -15,29 +15,29 @@ namespace Core {
 		public float Strong () {
 			return 0.299f * R + 0.587f * G + 0.114f * B;
 		}
-		public RGBColor8 ToRGBColor8() {
-			RGBColor8 color = new RGBColor8(
-			(byte)(Tools.Clamp(R, 0.0f, 1.0f) * 255),
-			(byte)(Tools.Clamp(G, 0.0f, 1.0f) * 255),
-			(byte)(Tools.Clamp(B, 0.0f, 1.0f) * 255));
-			return color;
-		}
-		public RGBColor8 ToRGBColor8(float min, float max) {
-			if (min > max) {
-				float t = min;
-				min = max;
-				max = t;
-			}
-			float offset = max - min;
-			float r = Tools.Clamp(R - min, 0.0f, max) / offset;
-			float g = Tools.Clamp(R - min, 0.0f, max) / offset;
-			float b = Tools.Clamp(R - min, 0.0f, max) / offset;
-			RGBColor8 color = new RGBColor8(
-			(byte)(r * 255),
-			(byte)(g * 255),
-			(byte)(b * 255));
-			return color;
-		}
+		//public RGBColor8 ToRGBColor8() {
+		//	RGBColor8 color = new RGBColor8(
+		//	(byte)(Tools.Clamp(R, 0.0f, 1.0f) * 255),
+		//	(byte)(Tools.Clamp(G, 0.0f, 1.0f) * 255),
+		//	(byte)(Tools.Clamp(B, 0.0f, 1.0f) * 255));
+		//	return color;
+		//}
+		//public RGBColor8 ToRGBColor8(float min, float max) {
+		//	if (min > max) {
+		//		float t = min;
+		//		min = max;
+		//		max = t;
+		//	}
+		//	float offset = max - min;
+		//	float r = Tools.Clamp(R - min, 0.0f, max) / offset;
+		//	float g = Tools.Clamp(R - min, 0.0f, max) / offset;
+		//	float b = Tools.Clamp(R - min, 0.0f, max) / offset;
+		//	RGBColor8 color = new RGBColor8(
+		//	(byte)(r * 255),
+		//	(byte)(g * 255),
+		//	(byte)(b * 255));
+		//	return color;
+		//}
 
 		#region Functions
 		/// <summary>

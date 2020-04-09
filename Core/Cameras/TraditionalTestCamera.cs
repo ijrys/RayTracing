@@ -10,8 +10,7 @@ using Math = System.Math;
 using Float = System.Single;
 using Math = System.MathF;
 #endif
-using Color = Core.RGBColor8;
-using Image = Core.Image<Core.RGBColor8>;
+using Image = Core.LightStrongImage;
 
 namespace Core.Cameras {
 	public class TraditionalTestCamera {
@@ -102,7 +101,8 @@ namespace Core.Cameras {
 						Ray r = new Ray(_origin, d);
 						color += scene.Render(r);
 					}
-					image[t, l] = (color / mutiplySample).ToRGBColor8();
+					//image[t, l] = (color / mutiplySample).ToRGBColor8();
+					image[t, l] = color / mutiplySample;
 				}
 			}
 		}

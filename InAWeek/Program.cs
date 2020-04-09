@@ -16,9 +16,8 @@ using Float = System.Single;
 using Math = System.MathF;
 #endif
 
-using Color = Core.RGBColor8;
-using Image = Core.Image<Core.RGBColor8>;
-using ImageTool = Core.ImageTools.ImageTools<Core.RGBColor8>;
+using Image = Core.LightStrongImage;
+using ImageTool = Core.ImageTools.ImageTools;
 using Core.Materials;
 
 namespace InAWeek {
@@ -69,7 +68,7 @@ namespace InAWeek {
 #endif
 
 			Console.WriteLine("save to " + fname + ".png");
-			ImageTool.SaveImageToFile(image, fname + ".png");
+			ImageTool.SaveImageToFile(image, fname + ".png", 2);
 
 			//Test();
 			Console.WriteLine("finish");

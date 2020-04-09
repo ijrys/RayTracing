@@ -15,45 +15,10 @@ namespace Core.Objects {
 		Vector3 O;
 		Float R;
 
-		//public static LightStrong DefaultColor = new LightStrong(1.0f, 0.5f, 0);
-		//public LightStrong Color { get; set; } = DefaultColor;
-
 		public Sphere(Vector3 o, Float r) {
 			O = o;
 			R = r;
 		}
-
-		//public override LightStrong IntersectLight(Vector3 point, Vector3 normal, int deep) {
-		//	return base.IntersectLight(point, normal, deep);
-		//}
-
-		//public override LightStrong IntersectColor(Vector3 p, Vector3 normal, int deep) {
-		//	if (deep <= 1) {
-		//		return Color * 0.1f;
-		//	}
-		//	int smapL = RenderConfiguration.Configurations.SmapingLevel - RenderConfiguration.Configurations.RayTraceDeep + deep;
-		//	if (smapL < 1) smapL = 1;
-		//	smapL = smapL * smapL;
-		//	LightStrong l = default;
-		//	for (int nsmap = 0; nsmap < smapL; nsmap++) {
-		//		Vector3 spO = normal + p;
-		//		Vector3 tp = Tools.RandomPointInSphere() + spO;
-		//		Vector3 dir = tp - p;
-		//		while (dir.LengthSquared() < 0.1) {
-		//			tp = Tools.RandomPointInSphere() + spO;
-		//			dir = tp - p;
-		//		}
-		//		Ray r = new Ray(p, tp - p);
-
-		//		LightStrong c = Scene.Light(r, deep - 1, this);
-		//		l += c;
-		//	}
-		//	l /= smapL;
-		//	//Float lstrong = l.Strong();
-
-		//	//return Color * lstrong * 0.01f + Color * l * lstrong * 0.9f;
-		//	return Color * l;
-		//}
 
 		/// <summary>
 		/// 相交深度测试

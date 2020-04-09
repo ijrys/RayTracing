@@ -243,14 +243,6 @@ namespace Core {
 			}
 		}
 
-
-		public RGBColor8 ToRGB8 () {
-			RGBColor8 color = new RGBColor8(
-				(byte)(Tools.Clamp(X, 0.0f, 1.0f) * 255),
-				(byte)(Tools.Clamp(Y, 0.0f, 1.0f) * 255),
-				(byte)(Tools.Clamp(Z, 0.0f, 1.0f) * 255));
-			return color;
-		}
 		#endregion
 
 		#region Static functions

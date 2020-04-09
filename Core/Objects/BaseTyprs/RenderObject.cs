@@ -6,7 +6,7 @@ using Float = System.Single;
 #endif
 
 namespace Core.Objects {
-	public abstract class RenderObject : SceneObject, IRenderAble {
+	public abstract class RenderObject : SceneObject { //, IRenderAble {
 		private Material _material;
 		public Material Material {
 			get {
@@ -21,17 +21,6 @@ namespace Core.Objects {
 				}
 				_material = value;
 			}
-		}
-
-		/// <summary>
-		/// 相交点颜色
-		/// </summary>
-		/// <param name="point"></param>
-		/// <param name="normal"></param>
-		/// <param name="deep"></param>
-		/// <returns></returns>
-		public virtual LightStrong IntersectColor(Vector3 point, Vector3 dir, Vector3 normal, int deep) {
-			return IntersectLight(point, dir, normal, deep);
 		}
 
 		/// <summary>
@@ -55,41 +44,13 @@ namespace Core.Objects {
 			}
 			// 递归深度极限
 			if (deep <= 1) {
-				return Material.BaseColor * 0.5f;
+				return Material.BaseColor * 0.4f;
 			}
 
 			int smapL = RenderConfiguration.Configurations.ReflectSmapingLevel - RenderConfiguration.Configurations.RayTraceDeep + deep;
 			if (smapL < 1) smapL = 1;
 			smapL = smapL * 3 - 2;
 			LightStrong l = default;
-			#region Light Color 分开
-			//if (Material.MetalDegree < 0.99) { // 计算散射色
-			//	int ssmapL = (int)(smapL * (1.0f - Material.MetalDegree));
-			//	if (ssmapL < 1) ssmapL = 1;
-			//	LightStrong scatterl = default;
-			//	for (int nsmap = 0; nsmap < ssmapL; nsmap++) {
-			//		Vector3 spO = normal + point;
-			//		Vector3 tp = Tools.RandomPointInSphere() + spO;
-			//		Vector3 raydir = tp - point;
-			//		while (raydir.LengthSquared() < 0.1) {
-			//			tp = Tools.RandomPointInSphere() + spO;
-			//			raydir = tp - point;
-			//		}
-			//		Ray r = new Ray(point, tp - point);
-
-			//		LightStrong c = Scene.Light(r, deep - 1, this);
-			//		scatterl += c;
-			//	}
-			//	scatterl /= smapL;
-			//	l += scatterl * (1.0f - Material.MetalDegree);
-			//}
-			//if (Material.MetalDegree > 0.01) { // 计算金属色
-			//	Vector3 refDir = Tools.Reflect(dir, normal);
-			//	Ray r = new Ray(point, refDir);
-			//	LightStrong smoothl = Scene.Color(r, deep - 1, this);
-			//	l += smoothl * Material.MetalDegree;
-			//}
-			#endregion
 			#region 仅计算Color
 			{
 				int raycount = 1;

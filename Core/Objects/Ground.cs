@@ -9,11 +9,9 @@ using Math = System.Math;
 using Float = System.Single;
 using Math = System.MathF;
 #endif
-using Color = Core.RGBColor8;
 
 namespace Core.Objects {
 	public class Ground : RenderObject {
-		LightStrong _color;
 
 		public override Vector3 Position {
 			get => _position;
@@ -21,10 +19,8 @@ namespace Core.Objects {
 		}
 
 		public Ground() {
-			_color = new LightStrong(0.25f, 0.75f, 0.25f) * 2;
 		}
 		public Ground(Float y) : base(new Vector3(ConstValues.Zero, y, ConstValues.Zero)) {
-			_color = new LightStrong(0.25f, 0.75f, 0.25f) * 2;
 		}
 		public Ground(Materials.Material material) {
 			Material = material;
@@ -32,10 +28,6 @@ namespace Core.Objects {
 		public Ground(Float y, Materials.Material material) : base(new Vector3(ConstValues.Zero, y, ConstValues.Zero)) {
 			Material = material;
 		}
-
-		//public override LightStrong IntersectColor(Vector3 point, Vector3 normal, int deep) {
-		//	return Material.Color(point);
-		//}
 
 		public override (Float, Vector3, Vector3) IntersectDeep(Ray ray) {
 			Float _y = _position.Y;

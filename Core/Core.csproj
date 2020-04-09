@@ -9,6 +9,9 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Colors\Color16.cs" />
+    <Compile Remove="Colors\Color8.cs" />
+    <Compile Remove="Objects\BaseTyprs\IRenderAble.cs" />
     <Compile Remove="Rotation.cs" />
   </ItemGroup>
 
