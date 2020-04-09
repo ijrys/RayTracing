@@ -193,35 +193,35 @@ namespace Core {
 				new Vector3 (-0.482962913144535f, -0.258819045102521f, -0.836516303737808f),
 			},
 		};
-		public static Vector3[] RandomReflectDirection(Vector3 normal, int level) {
-			if (level <= 1) return new Vector3[] { normal };
-			Vector3[] source = null, re;
+		//public static Vector3[] RandomReflectDirection(Vector3 normal, int level) {
+		//	if (level <= 1) return new Vector3[] { normal };
+		//	Vector3[] source = null, re;
 
-			if (level > 8) {
-				level = 8;
-			}
-			source = ReflectDirection[level - 1];
+		//	if (level > 8) {
+		//		level = 8;
+		//	}
+		//	source = ReflectDirection[level - 1];
 
-			if (normal.Y >= 0.9999f) { //法线垂直向上
-				return source;
-			}
-			re = new Vector3[source.Length];
+		//	if (normal.Y >= 0.9999f) { //法线垂直向上
+		//		return source;
+		//	}
+		//	re = new Vector3[source.Length];
 			
-			if (normal.Y <= -0.9999f) { //法线垂直向下
-				for(int i = 0; i < source.Length; i++){
-					re[i] = source[i] * -1.0f;
-				}
-			}
-			else { //法线不垂直
-				Vector3 vx = (normal ^ new Vector3(0.0f, 1.0f, 0.0f)).Normalize();
-				Vector3 vz = (normal ^ vx).Normalize();
-				for (int i = 0; i < source.Length; i++) {
-					Vector3 pos = source[i];
-					re[i] = pos.X * vx + pos.Y * normal + pos.Z * vz;
-				}
-			}
-			return re;
-		}
+		//	if (normal.Y <= -0.9999f) { //法线垂直向下
+		//		for(int i = 0; i < source.Length; i++){
+		//			re[i] = source[i] * -1.0f;
+		//		}
+		//	}
+		//	else { //法线不垂直
+		//		Vector3 vx = (normal ^ new Vector3(0.0f, 1.0f, 0.0f)).Normalize();
+		//		Vector3 vz = (normal ^ vx).Normalize();
+		//		for (int i = 0; i < source.Length; i++) {
+		//			Vector3 pos = source[i];
+		//			re[i] = pos.X * vx + pos.Y * normal + pos.Z * vz;
+		//		}
+		//	}
+		//	return re;
+		//}
 
 		public static Float LightStrongByDistance(Float distance) {
 			if (distance < 0) return 1.0f;
