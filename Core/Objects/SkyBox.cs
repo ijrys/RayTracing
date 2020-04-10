@@ -25,5 +25,9 @@ namespace Core.Objects {
 		public override (Float, Vector3, Vector3) IntersectDeep(Ray ray) {
 			return (Float.PositiveInfinity, ray.Direction, ray.Direction);
 		}
+
+		public override (float, Vector3, Vector3) InterIntersect(Ray ray) {
+			return (Float.NegativeInfinity, Vector3.Zero, Vector3.Zero);
+		}
 	}
 }

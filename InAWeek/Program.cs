@@ -47,16 +47,20 @@ namespace InAWeek {
 			sphere = new Sphere(new Vector3(40, 10, 70), 10) { Material = new Material(new LightStrong(1.0f, 1.0f, 1.0f)) { MetalDegree = 1.0f } };
 			scene.AppendObject(sphere);
 
+
+			sphere = new Sphere(new Vector3(10, 10, 30), 10) { Material = new Material(new LightStrong(0.8f, 1.0f, 0.8f)) { MetalDegree = 0.8f, IsTransparent = true, RefractiveIndices = 1.15f } };
+			scene.AppendObject(sphere);
+
 			//Image image = new Image(72, 48);
 			//Image image = new Image(144, 96);
 			Image image = new Image(768, 512);
 			//Image image = new Image(1536, 1024);
 
 			//TestCamera camera = new TestCamera(Vector3.Zero, 0.0f, 30.0f);
-			TraditionalTestCamera camera = new TraditionalTestCamera(new Vector3(0.0f, 15.0f, -50.0f), 2.0f, 1.0f);
-			//RenderConfiguration.Configurations.RayTraceDeep = 1;
-			RenderConfiguration.Configurations.RayTraceDeep = 6;
-			RenderConfiguration.Configurations.SmapingLevel = 4;
+			TraditionalTestCamera camera = new TraditionalTestCamera(new Vector3(0.0f, 15.0f, -100.0f), 1.3f, 1.0f);
+			RenderConfiguration.Configurations.RayTraceDeep = 10;
+			RenderConfiguration.Configurations.SmapingLevel = 2;
+			RenderConfiguration.Configurations.ReflectSmapingLevel = 5;
 
 			camera.Render(image, scene);
 

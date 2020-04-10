@@ -127,6 +127,14 @@ namespace Core {
 
 		#region Operator
 		/// <summary>
+		/// 矢量反向
+		/// </summary>
+		/// <param name="vector"></param>
+		/// <returns></returns>
+		public static Vector3 operator - (Vector3 vector) {
+			return new Vector3(-vector.X, -vector.Y, -vector.Z);
+		}
+		/// <summary>
 		/// 矢量加
 		/// </summary>
 		/// <param name="l"></param>

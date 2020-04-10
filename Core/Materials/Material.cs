@@ -28,6 +28,14 @@ namespace Core.Materials {
 		/// 反金属度
 		/// </summary>
 		public float AMetalDegree = 1.0f;
+		/// <summary>
+		/// 是否为透明物体
+		/// </summary>
+		public bool IsTransparent = false;
+		/// <summary>
+		/// 折射率
+		/// </summary>
+		public float RefractiveIndices = 1.0f;
 
 		public Material() { }
 		public Material (LightStrong baseColor) {

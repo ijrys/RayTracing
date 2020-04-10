@@ -40,5 +40,9 @@ namespace Core.Objects {
 			Float distance = (t * ray.Direction).Length();
 			return (distance, ray.Direction * t + ray.Origin, new Vector3(0.0f, 1.0f, 0.0f));
 		}
+
+		public override (Float, Vector3, Vector3) InterIntersect(Ray ray) {
+			return (Float.NegativeInfinity, Vector3.Zero, Vector3.Zero);
+		}
 	}
 }
