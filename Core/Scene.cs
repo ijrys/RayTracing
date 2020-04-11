@@ -27,6 +27,10 @@ namespace Core {
 			Objects.Add(renderobj);
 		}
 
+		public void ReadyToRender () {
+			objects = Objects.ToArray();
+		}
+
 		/// <summary>
 		/// 获取光线追踪辐照度
 		/// </summary>
@@ -34,7 +38,6 @@ namespace Core {
 		/// <param name="deep">当前追踪深度</param>
 		/// <returns>颜色，追踪距离</returns>
 		public LightStrong Render(Ray ray) {
-			objects = Objects.ToArray();
 			(LightStrong c, Float _) = Light(ray, RenderConfiguration.Configurations.RayTraceDeep, null);
 			return c;
 		}

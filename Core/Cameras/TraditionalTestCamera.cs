@@ -73,6 +73,7 @@ namespace Core.Cameras {
 				Debugger.BeginBranch(Origin);
 			}
 #endif
+			scene.ReadyToRender();
 			int mutiplySample = RenderConfiguration.Configurations.SmapingLevel;
 			mutiplySample = mutiplySample * 3 - 2;
 

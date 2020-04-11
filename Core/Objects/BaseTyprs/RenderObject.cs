@@ -159,7 +159,6 @@ namespace Core.Objects {
 					Ray r = new Ray(point, raydir);
 					//Console.WriteLine('\t' + this.Name + " [reflact] : " + r);
 					(LightStrong c, Float _) = Scene.Light(r, deep - 1, this); //, this);
-
 					reflectl += c;
 				}
 				reflectl /= raycount;
