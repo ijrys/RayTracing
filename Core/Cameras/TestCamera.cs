@@ -81,9 +81,6 @@ namespace Core.Cameras {
 		}
 
 		public void Render(Image image, Scene scene) {
-#if RayDebugger
-			SceneDebug Debugger = scene.Debugger;
-#endif
 
 			int imgw = image.Width, imgh = image.Height;
 			Float verField = _horField * image.Height / image.Width;
@@ -104,15 +101,9 @@ namespace Core.Cameras {
 					Float sinb = Math.Sin(nrl);
 					Float cosb = Math.Cos(nrl);
 					Vector3 d = new Vector3(sina * sinb, cosa, sina * cosb);
-#if RayDebugger
-					if (Debugger != null) {
-						Debugger.NewRayLine();
-						Debugger.Ray.AppendPoint(1);
-						Debugger.Ray.AppendPoint(d);
-					}
-#endif
+
 					Ray r = new Ray(_origin, d);
-					LightStrong color = scene.Light(r, RenderConfiguration.Configurations.RayTraceDeep);
+					LightStrong color = scene.Render(r);
 					image[t, l] = color;
 				}
 			}

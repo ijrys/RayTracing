@@ -17,6 +17,9 @@ namespace Core {
 			Origin = o;
 			Direction = d;
 		}
+		public override string ToString() {
+			return $"{{o: {Origin}, d: {Direction}}}";
+		}
 
 		public Vector3 this[Float t] {
 			get {

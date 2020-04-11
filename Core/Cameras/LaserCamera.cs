@@ -1,7 +1,7 @@
-﻿using Core.Debug;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using Core.Debug;
 
 #if UseDouble
 using Float = System.Double;
@@ -13,7 +13,15 @@ using Math = System.MathF;
 using Image = Core.LightStrongImage;
 
 namespace Core.Cameras {
-	public class TraditionalTestCamera {
+	public class LaserCamera {
+		public struct PointPair {
+			public int x, y;
+			public PointPair(int xx, int yy) {
+				x = xx;
+				y = yy;
+			}
+		}
+
 		Vector3 _origin;
 
 		/// <summary>
@@ -56,15 +64,16 @@ namespace Core.Cameras {
 			}
 		}
 
-		public TraditionalTestCamera(Vector3 origin) {
+		public LaserCamera(Vector3 origin) {
 			Origin = origin;
 		}
-		public TraditionalTestCamera(Vector3 origin, Float horLength, Float zOffset) {
+		public LaserCamera(Vector3 origin, Float horLength, Float zOffset) {
 			Origin = origin;
 			HorLength = horLength;
 			ZOffset = zOffset;
 		}
 
+		public List<PointPair> Points = new List<PointPair>();
 
 		public void Render(Image image, Scene scene) {
 #if RayDebugger
@@ -73,38 +82,31 @@ namespace Core.Cameras {
 				Debugger.BeginBranch(Origin);
 			}
 #endif
-			int mutiplySample = RenderConfiguration.Configurations.SmapingLevel;
-			mutiplySample = mutiplySample * 3 - 2;
 
 			int imgw = image.Width, imgh = image.Height;
 			Float verLen = imgh * HorLength / imgw;
 			Float lp = HorLength / 2, tp = verLen / 2;
 
-			for (int t = 0; t < imgh; t++) {
+			foreach (var point in Points) {
+				int t = point.y, l = point.x;
 				Float ntp = tp - verLen / imgh * t;
 				Float ntpnext = tp - verLen / imgh * (t + 1);
-				if (t % 10 == 0) {
-					Console.WriteLine($"{t} / {imgh} : {t * 100.0 / imgh:0.0}%, ignore:{Scene.ZXJHL}");
-				}
-				for (int l = 0; l < imgw; l++) {
-					Float nlp = _horLength / imgw * l - lp;
-					Float nlpnext = _horLength / imgw * (l + 1) - lp;
-					LightStrong color = default;
-					for (int nowsample = 0; nowsample < mutiplySample; nowsample++) {
-						Float lptmp = Tools.RandomIn(nlp, nlpnext);
-						Float tptmp = Tools.RandomIn(ntp, ntpnext);
-						Vector3 d = new Vector3(lptmp, tptmp, _zOffset);
+				Float nlp = _horLength / imgw * l - lp;
+				Float nlpnext = _horLength / imgw * (l + 1) - lp;
+				LightStrong color = default;
+				Float lptmp = (nlp + nlpnext) * 0.5f;
+				Float tptmp = (ntp + ntpnext) * 0.5f;
+				Vector3 d = new Vector3(lptmp, tptmp, _zOffset);
 #if RayDebugger
-						if (Debugger != null) {
-							Debugger.AppendPoint(_origin + d);
-						}
-#endif
-						Ray r = new Ray(_origin, d);
-						color += scene.Render(r);
-					}
-					image[t, l] = color / mutiplySample;
+				if (Debugger != null) {
+					Debugger.AppendPoint(_origin + d);
 				}
+#endif
+				Ray r = new Ray(_origin, d);
+				color += scene.Render(r);
+				image[t, l] = color;
 			}
 		}
+
 	}
 }

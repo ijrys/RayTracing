@@ -27,6 +27,10 @@ namespace Core {
 			Z = z;
 		}
 
+		public override string ToString() {
+			return $"({X},{Y},{Z})";
+		}
+
 		#region Functions
 		/// <summary>
 		/// 矢量加
@@ -189,13 +193,13 @@ namespace Core {
 			return Div(l, r);
 		}
 		/// <summary>
-		/// 坐标对应数乘
+		/// 点积
 		/// </summary>
 		/// <param name="l"></param>
 		/// <param name="r"></param>
 		/// <returns></returns>
-		public static Vector3 operator *(Vector3 l, Vector3 r) {
-			return NumMut(l, r);
+		public static Float operator *(Vector3 l, Vector3 r) {
+			return Dot(l, r);
 		}
 		/// <summary>
 		/// 坐标对应数除
@@ -207,13 +211,13 @@ namespace Core {
 			return NumDiv(l, r);
 		}
 		/// <summary>
-		/// 点积
+		/// 坐标对应乘
 		/// </summary>
 		/// <param name="l"></param>
 		/// <param name="r"></param>
 		/// <returns></returns>
-		public static Float operator &(Vector3 l, Vector3 r) {
-			return Dot(l, r);
+		public static Vector3 operator &(Vector3 l, Vector3 r) {
+			return NumMut(l, r);
 		}
 		/// <summary>
 		/// 叉积

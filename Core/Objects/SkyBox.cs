@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Core.Debug;
+using System;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using System.Text;
@@ -15,6 +16,13 @@ namespace Core.Objects {
 	public class SkyBox : RenderObject {
 
 		public override LightStrong IntersectLight(Vector3 point, Vector3 dir, Vector3 normal, int deep) {
+#if RayDebugger
+			SceneDebug Debugger = Scene.debugger;
+			if (Debugger != null) {
+				Debugger.BeginBranch(point);
+				Debugger.EndBranch();
+			}
+#endif
 			if (dir.Y > 0.94f) {
 				return LightStrong.White;
 			}
@@ -23,7 +31,7 @@ namespace Core.Objects {
 		}
 
 		public override (Float, Vector3, Vector3) IntersectDeep(Ray ray) {
-			return (Float.PositiveInfinity, ray.Direction, ray.Direction);
+			return (Float.PositiveInfinity, ray.Origin + ray.Direction, ray.Direction);
 		}
 
 		public override (float, Vector3, Vector3) InterIntersect(Ray ray) {

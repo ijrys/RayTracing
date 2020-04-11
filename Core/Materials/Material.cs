@@ -21,17 +21,22 @@ namespace Core.Materials {
 				if (value < 0) value = 0;
 				else if (value > 1) value = 1;
 				_metalDegree = value;
-				AMetalDegree = 1.0f - 0.95f * value;
+				AMetalDegree = 1.0f - 0.98f * value;
 			}
 		}
 		/// <summary>
 		/// 反金属度
 		/// </summary>
 		public float AMetalDegree = 1.0f;
+
 		/// <summary>
 		/// 是否为透明物体
 		/// </summary>
 		public bool IsTransparent = false;
+		/// <summary>
+		/// 透光度
+		/// </summary>
+		public float TransparentIndex = 1.0f;
 		/// <summary>
 		/// 折射率
 		/// </summary>

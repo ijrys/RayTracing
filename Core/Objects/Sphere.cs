@@ -27,8 +27,8 @@ namespace Core.Objects {
 		/// <returns></returns>
 		public override (float, Vector3, Vector3) InterIntersect(Ray ray) {
 			Vector3 A = ray.Origin, B = ray.Direction, C = O;
-			Float a = B & B;
-			Float b = 2 * B & (A - C);
+			Float a = B * B;
+			Float b = 2 * B * (A - C);
 			Float c = (A - C).LengthSquared() - R * R;
 
 
@@ -66,8 +66,8 @@ namespace Core.Objects {
 		/// <returns>距离， 相交点，法线</returns>
 		public override (Float, Vector3, Vector3) IntersectDeep(Ray ray) {
 			Vector3 A = ray.Origin, B = ray.Direction, C = O;
-			Float a = B & B;
-			Float b = 2 * B & (A - C);
+			Float a = B * B;
+			Float b = 2 * B * (A - C);
 			Float c = (A - C).LengthSquared() - R * R;
 
 

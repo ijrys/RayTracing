@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 
 namespace Test {
 	class Program {
@@ -52,11 +53,31 @@ namespace Test {
 			Console.WriteLine("},");
 		}
 
-		static void Main(string[] args) {
-			for (int i = 1; i <9; i ++) {
-				GenerateLevel(i);
-				Console.WriteLine();
+		static int[] arr = new int[2048];
+		static void TaskFun() {
+			Random r = new Random();
+			for (int t = 0; t < 200; t++) {
+
+				int mtp = r.Next(1, 10);
+				for (int i = 0; i < arr.Length; i++) {
+					arr[i] = i * mtp;
+				}
+				Console.WriteLine(arr[mtp]);
 			}
+		}
+
+		static async void TaskExecuter() {
+			Task.Run(TaskFun);
+			Task.Run(TaskFun);
+			Task.Run(TaskFun);
+		}
+		static void Main(string[] args) {
+			//for (int i = 1; i < 9; i++) {
+			//	GenerateLevel(i);
+			//	Console.WriteLine();
+			//}
+			TaskExecuter();
+			Console.WriteLine("finish");
 		}
 	}
 }

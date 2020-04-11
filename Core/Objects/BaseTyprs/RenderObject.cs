@@ -1,9 +1,12 @@
-﻿#if UseDouble
-using Float = System.Double;
-#else
+﻿using Core.Debug;
 using Core.Materials;
 using System;
+#if UseDouble
+using Float = System.Double;
+using Math = System.Math;
+#else
 using Float = System.Single;
+using Math = System.MathF;
 #endif
 
 namespace Core.Objects {
@@ -45,43 +48,118 @@ namespace Core.Objects {
 		/// <param name="deep"></param>
 		/// <returns></returns>
 		public virtual LightStrong IntersectLight(Vector3 point, Vector3 dir, Vector3 normal, int deep) {
+#if RayDebugger
+			SceneDebug Debugger = Scene.debugger;
+			if (Debugger != null) {
+				Debugger.BeginBranch(point);
+			}
+#endif
+
+			LightStrong returnlight = default;
 			// 发光体返回发光颜色
 			if (Material.LightAble) {
-				return Material.LightColor;
+				returnlight = Material.LightColor;
+				goto returnPoint;
 			}
 			// 递归深度极限
 			if (deep <= 1) {
-				return Material.BaseColor * 0.4f;
+				returnlight = Material.BaseColor * 0.3f;
+				goto returnPoint;
 			}
 
+			dir = dir.Normalize();
+			bool IsBackFace = false;
+			if (dir.Dot(normal) > 0) { // 背面
+				IsBackFace = true;
+				normal = -normal;
+			}
+
+			#region 计算最大光强
+			//{
+			//	Float maxLight = Material.LightColor.R;
+			//	maxLight = Math.Max(maxLight, Material.LightColor.G);
+			//	maxLight = Math.Max(maxLight, Material.LightColor.B);
+			//	maxLightStrong *= maxLight;
+			//} 
+			#endregion
+
+			// 计算追踪光线总数
+			int traceRayNum = RenderConfiguration.Configurations.ReflectSmapingLevel - RenderConfiguration.Configurations.RayTraceDeep + deep;
+			traceRayNum = (int)(traceRayNum * Material.AMetalDegree);
+			if (traceRayNum < 1) traceRayNum = 1;
+			traceRayNum = traceRayNum * 3 - 2;
+
+			#region 计算折射光
+			LightStrong refractl = default; // 折射光
+			float refractPower = 0.0f; // 折射光强度
+			if (Material.IsTransparent) {
+				float riindex = Material.RefractiveIndices;
+				if (!IsBackFace) riindex = 1.0f / riindex;
+				// 计算折射光线
+				(float pow, Vector3 rdir) = Tools.Refract(dir, normal, riindex);
+				if (pow < 0) {
+					goto endRefract;
+				}
+
+				refractPower = pow * Material.TransparentIndex;
+
+				int raycount = (int)(traceRayNum * refractPower);
+				traceRayNum -= raycount;
+
+				float randomScale = Material.AMetalDegree * Material.AMetalDegree * 0.5f;
+				raycount = (int)(traceRayNum * randomScale);
+				if (raycount < 1 && refractPower > 0.00001) raycount = 1;
+
+				if (raycount == 0) {
+					refractl = Material.BaseColor;
+					goto endRefract;
+				}
+
+				rdir = normal * randomScale + rdir * (1.0f - randomScale);
+
+				for (int nsmap = 0; nsmap < raycount; nsmap++) {
+					Vector3 raydir = Tools.RandomPointInSphere() * randomScale + rdir;
+
+					Ray r = new Ray(point, raydir);
+					//Console.WriteLine('\t' + this.Name + " [refract] : " + r);
+					(LightStrong c, Float distance) = Scene.Light(r, deep - 1, this);
+
+					if (IsBackFace) { //内部光线，进行吸收计算
+						Float xsl = Math.Log(distance + 1.0f) + 1.0f;
+						refractl *= Material.BaseColor / xsl;
+					}
+					refractl += c;
+				}
+				refractl /= raycount;
+			}
+
+		endRefract:
+			#endregion
 
 			#region 计算反射光
 			LightStrong reflectl = default; // 反射光
 			{
-				int smapL = RenderConfiguration.Configurations.ReflectSmapingLevel - RenderConfiguration.Configurations.RayTraceDeep + deep;
-				if (smapL < 1) smapL = 1;
-				smapL = smapL * 3 - 2;
-
-				int raycount = 1;
-				smapL = (int)(smapL * (Material.AMetalDegree));
-				if (smapL < 1) smapL = 1;
-
-				raycount = smapL;
+				int raycount = traceRayNum;
+				if(raycount < 1 && refractPower < 0.99f) {
+					raycount = 1;
+				}
 				Vector3 spO;
 				{
 					Vector3 spRO = Tools.Reflect(dir, normal);
 					spO = normal * (1.0f - Material.MetalDegree) + spRO * Material.MetalDegree;
 				}
-				for (int nsmap = 0; nsmap < smapL; nsmap++) {
+				for (int nsmap = 0; nsmap < raycount; nsmap++) {
 					Vector3 tp = Tools.RandomPointInSphere() * Material.AMetalDegree + spO;
 					Vector3 raydir = tp;
 					while (raydir.LengthSquared() < 0.1) {
 						tp = Tools.RandomPointInSphere() + spO;
 						raydir = tp;
 					}
-					Ray r = new Ray(point, raydir);
 
-					LightStrong c = Scene.Light(r, deep - 1, this);
+					Ray r = new Ray(point, raydir);
+					//Console.WriteLine('\t' + this.Name + " [reflact] : " + r);
+					(LightStrong c, Float _) = Scene.Light(r, deep - 1, this); //, this);
+
 					reflectl += c;
 				}
 				reflectl /= raycount;
@@ -89,57 +167,15 @@ namespace Core.Objects {
 			}
 			#endregion
 
-			#region 计算折射光
-			LightStrong refractl = default; // 折射光
-			float refractPower = 0.0f; // 折射光强度
-			if (Material.IsTransparent) {
-				//Vector3 outwardNormal;
-				//float ni_over_nt;
-				//float cosine;
-				//float innormaldot = dir.Dot( normal);
-				//if (innormaldot < 0) {
-				//	outwardNormal = -normal;
-				//	ni_over_nt = Material.RefractiveIndices;
-				//	cosine = Material.RefractiveIndices * dir.Dot(normal) / dir.Length();
-				//} else {
-				//	outwardNormal = normal;
-				//	ni_over_nt = 1.0f / Material.RefractiveIndices;
-				//	cosine = -dir.Dot(normal) / dir.Length();
-				//}
+			returnlight = refractl * refractPower + reflectl * (1.0f - refractPower);
 
-				(float pow, Vector3 rdir) = Tools.Refract(dir, normal, Material.RefractiveIndices);
-				if (pow < 0) {
-					goto endRefract;
-					rdir = Tools.Reflect(dir, normal);
-					pow = -pow;
-				}
-				refractPower = MathF.Sqrt(pow);
-				refractl = Scene.Light(new Ray(point, rdir), deep - 1, this) * Material.BaseColor;
-
-				//(Float rdis, Vector3 opoint, Vector3 onormal) = InterIntersect(new Ray(point, rdir));
-				//(float opow, Vector3 odir) = Tools.Refract(rdir, -onormal, 1.0f / Material.RefractiveIndices);
-				//if (opow < 0.0f) { // 内部发生全反射，多一次计算
-				//	// 反射计算
-
-
-				//	(rdis, opoint, onormal) = InterIntersect(new Ray(opoint, odir));
-				//	(opow, odir) = Tools.Refract(rdir, -onormal, 1.0f / Material.RefractiveIndices);
-
-
-
-
-				//	float reflectpower = (0.299f * reflectl.R + 0.587f * reflectl.G + 0.114f * reflectl.B) / 3.0f;
-				//	refractl = new LightStrong(reflectpower, reflectpower, reflectpower);
-				//	goto endRefract;
-				//}
-				//refractl = Scene.Light(new Ray(opoint, odir), deep - 1, this);
-
+		returnPoint:
+#if RayDebugger
+			if (Debugger != null) {
+				Debugger.EndBranch();
 			}
-
-		endRefract:
-			#endregion
-
-			return refractl * refractPower + reflectl * (1.0f - refractPower);
+#endif
+			return returnlight;
 		}
 
 		public RenderObject() { }

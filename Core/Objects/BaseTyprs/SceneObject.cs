@@ -10,6 +10,7 @@ namespace Core.Objects {
 		public virtual Scene Scene { get => _scene; internal set => _scene = value; }
 		
 		public virtual Vector3 Position { get => _position; set =>_position = value; }
+		public string Name { get; set; } = "object";
 
 		public SceneObject () {
 			Position = default;

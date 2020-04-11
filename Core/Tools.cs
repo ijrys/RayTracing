@@ -234,6 +234,7 @@ namespace Core {
 		public static Float RandomIn(Float min, Float max) {
 			double d = random.NextDouble();
 			return (Float)(min * d + max * (1.0 - d));
+			//return (Float)((min + max) * 0.5);
 		}
 
 		/// <summary>
@@ -247,25 +248,33 @@ namespace Core {
 		}
 
 		/// <summary>
-		/// 返回折射光方向
+		/// 返回折射光方向和能量强度
 		/// </summary>
 		/// <param name="dir"></param>
-		/// <param name="n"></param>
+		/// <param name="niOverNt"></param>
 		/// <returns></returns>
-		public static (float, Vector3) Refract(Vector3 dir, Vector3 normal, float n) {
+		public static (float, Vector3) Refract(Vector3 dir, Vector3 normal, float niOverNt) {
 			dir = -dir.Normalize();
 			float dt = dir.Dot(normal);
-			float discriminant = 1.0f - n * n * (1 - dt * dt);
+			float discriminant = 1.0f - niOverNt * niOverNt * (1 - dt * dt);
 			if (discriminant > 0) {
-				Vector3 re = n * (dir - (normal * dt)) - normal * MathF.Sqrt(discriminant);
-				return (dt, re);
+				float cosGamma = MathF.Sqrt(discriminant);
+				Vector3 re = niOverNt * ((normal * dt) - dir) - normal * cosGamma;
+				return (1.0f - Schlick(dt, niOverNt), re);
 			}
 			else {
 				return (float.NegativeInfinity, Vector3.Zero);
 			}
 		}
 
-		private static float schlick(float cosine, float ref_idx) {
+		/// <summary>
+		/// 折射光线强度
+		/// https://en.wikipedia.org/wiki/Schlick%27s_approximation
+		/// </summary>
+		/// <param name="cosine"></param>
+		/// <param name="ref_idx"></param>
+		/// <returns></returns>
+		public static float Schlick(float cosine, float ref_idx) {
 			float r0 = (1 - ref_idx) / (1 + ref_idx);
 			r0 = r0 * r0;
 			float tmp = (1 - cosine);
