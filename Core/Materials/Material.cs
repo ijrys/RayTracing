@@ -6,10 +6,10 @@ namespace Core.Materials {
 
 	public class Material {
 
-		public LightStrong BaseColor { get; set; } = new LightStrong(0.25f, 0.25f, 0.25f);
+		public Light BaseColor { get; set; } = new Light(0.25f, 0.25f, 0.25f);
 
 		public bool LightAble { get; set; }
-		public LightStrong LightColor { get; set; } = new LightStrong(0.8f, 0.8f, 0.8f);
+		public Light LightColor { get; set; } = new Light(0.8f, 0.8f, 0.8f);
 
 		private float _metalDegree = 0.0f;
 		/// <summary>
@@ -43,7 +43,7 @@ namespace Core.Materials {
 		public float RefractiveIndices = 1.0f;
 
 		public Material() { }
-		public Material (LightStrong baseColor) {
+		public Material (Light baseColor) {
 			BaseColor = baseColor;
 		}
 	}

@@ -94,7 +94,7 @@ namespace Core.Cameras {
 				float ntpnext = tp - lenPerPixel * (t + 1);
 				float nlp = lenPerPixel * l - lp;
 				float nlpnext = lenPerPixel * (l + 1) - lp;
-				LightStrong color = default;
+				Light color = default;
 				float lptmp = (nlp + nlpnext) * 0.5f;
 				float tptmp = (ntp + ntpnext) * 0.5f;
 				Vector3 d = new Vector3(lptmp, tptmp, _zOffset);

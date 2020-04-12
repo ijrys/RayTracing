@@ -6,7 +6,7 @@ namespace Core {
 
 	public class LightStrongImage {
 		int _width, _height;
-		LightStrong[,] _content;
+		Light[,] _content;
 		/// <summary>
 		/// 水平镜像
 		/// </summary>
@@ -18,22 +18,22 @@ namespace Core {
 
 		public int Width { get => _width; }
 		public int Height { get => _height; }
-		public LightStrong[,] Content { get => _content; }
+		public Light[,] Content { get => _content; }
 
 		public LightStrongImage(int width, int height) {
 			_width = width;
 			_height = height;
-			_content = new LightStrong[height, width];
+			_content = new Light[height, width];
 		}
 
-		public void SetColor(int t, int l, LightStrong color) {
+		public void SetColor(int t, int l, Light color) {
 			_content[t, l] = color;
 		}
-		public LightStrong GetColor(int t, int l) {
+		public Light GetColor(int t, int l) {
 			return _content[t, l];
 		}
 
-		public LightStrong this[int t, int l] {
+		public Light this[int t, int l] {
 			get {
 				return _content[t, l];
 			}

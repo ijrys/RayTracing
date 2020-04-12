@@ -14,7 +14,7 @@ namespace Core.ImageTools {
 			}
 		}
 
-		private static RGBColor8 TransToColorGamma1(LightStrong light, float min = 0.0f, float max = 1.0f) {
+		private static RGBColor8 TransToColorGamma1(Light light, float min = 0.0f, float max = 1.0f) {
 			byte r, g, b;
 			float drt = (max - min) / 256.0f;
 
@@ -35,7 +35,7 @@ namespace Core.ImageTools {
 
 			return new RGBColor8(r, g, b);
 		}
-		private static RGBColor8 TransToColorGamma2(LightStrong light, float min = 0.0f, float max = 1.0f) {
+		private static RGBColor8 TransToColorGamma2(Light light, float min = 0.0f, float max = 1.0f) {
 			byte r, g, b;
 			float drt = (max - min) / 256.0f;
 
@@ -56,7 +56,7 @@ namespace Core.ImageTools {
 
 			return new RGBColor8(r, g, b);
 		}
-		private static RGBColor8 TransToColor(LightStrong light, float min, float max, int gamma) {
+		private static RGBColor8 TransToColor(Light light, float min, float max, int gamma) {
 			byte r, g, b;
 			float drt = (max - min);
 			float ga = 1.0f / gamma;

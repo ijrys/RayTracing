@@ -45,20 +45,20 @@ namespace InAWeek {
 		static Scene SceneAppendMatelTest(Scene scene) {
 			Sphere sphere;
 
-			sphere = new Sphere(new Vector3(-40, 30, 65), 10) { Name = "sp1", Material = new Material(new LightStrong(0.3f, 1.0f, 1.0f)) };
+			sphere = new Sphere(new Vector3(-40, 30, 65), 10) { Name = "sp1", Material = new Material(new Light(0.3f, 1.0f, 1.0f)) };
 			scene.AppendObject(sphere);
-			sphere = new Sphere(new Vector3(0, 30, 65), 10) { Name = "sp2", Material = new Material(new LightStrong(1.0f, 0.3f, 1.0f)) };
+			sphere = new Sphere(new Vector3(0, 30, 65), 10) { Name = "sp2", Material = new Material(new Light(1.0f, 0.3f, 1.0f)) };
 			scene.AppendObject(sphere);
-			sphere = new Sphere(new Vector3(40, 30, 65), 10) { Name = "sp3", Material = new Material(new LightStrong(1.0f, 1.0f, 0.3f)) };
+			sphere = new Sphere(new Vector3(40, 30, 65), 10) { Name = "sp3", Material = new Material(new Light(1.0f, 1.0f, 0.3f)) };
 			scene.AppendObject(sphere);
-			sphere = new Sphere(new Vector3(0.0f, 10.0f, -120.0f), 10) { Name = "sp4", Material = new Material(new LightStrong(0.3f, 0.3f, 0.3f)) };
+			sphere = new Sphere(new Vector3(0.0f, 10.0f, -120.0f), 10) { Name = "sp4", Material = new Material(new Light(0.3f, 0.3f, 0.3f)) };
 			scene.AppendObject(sphere);
 
-			sphere = new Sphere(new Vector3(-40, 10, 70), 10) { Name = "sp5", Material = new Material(new LightStrong(1.0f, 1.0f, 1.0f)) { MetalDegree = 0.0f } };
+			sphere = new Sphere(new Vector3(-40, 10, 70), 10) { Name = "sp5", Material = new Material(new Light(1.0f, 1.0f, 1.0f)) { MetalDegree = 0.0f } };
 			scene.AppendObject(sphere);
-			sphere = new Sphere(new Vector3(0, 10, 70), 10) { Name = "sp6", Material = new Material(new LightStrong(1.0f, 1.0f, 1.0f)) { MetalDegree = 0.5f } };
+			sphere = new Sphere(new Vector3(0, 10, 70), 10) { Name = "sp6", Material = new Material(new Light(1.0f, 1.0f, 1.0f)) { MetalDegree = 0.5f } };
 			scene.AppendObject(sphere);
-			sphere = new Sphere(new Vector3(40, 10, 70), 10) { Name = "sp7", Material = new Material(new LightStrong(1.0f, 1.0f, 1.0f)) { MetalDegree = 1.0f } };
+			sphere = new Sphere(new Vector3(40, 10, 70), 10) { Name = "sp7", Material = new Material(new Light(1.0f, 1.0f, 1.0f)) { MetalDegree = 1.0f } };
 			scene.AppendObject(sphere);
 
 			return scene;
@@ -66,11 +66,11 @@ namespace InAWeek {
 
 		static Scene SceneAppendTransparent(Scene scene) {
 			Sphere sphere;
-			sphere = new Sphere(new Vector3(-15, 6, 30), 6) { Name = "spt1", Material = new Material(new LightStrong(0.8f, 1.0f, 0.8f)) { MetalDegree = 1.0f, IsTransparent = true, RefractiveIndices = 1.5f, TransparentIndex = 0.5f } };
+			sphere = new Sphere(new Vector3(-15, 6, 30), 6) { Name = "spt1", Material = new Material(new Light(0.8f, 1.0f, 0.8f)) { MetalDegree = 1.0f, IsTransparent = true, RefractiveIndices = 1.5f, TransparentIndex = 0.5f } };
 			scene.AppendObject(sphere);
-			sphere = new Sphere(new Vector3(0, 6, 30), 6) { Name = "spt2", Material = new Material(new LightStrong(0.8f, 1.0f, 0.8f)) { MetalDegree = 0.75f, IsTransparent = true, RefractiveIndices = 1.5f } };
+			sphere = new Sphere(new Vector3(0, 6, 30), 6) { Name = "spt2", Material = new Material(new Light(0.8f, 1.0f, 0.8f)) { MetalDegree = 0.75f, IsTransparent = true, RefractiveIndices = 1.5f } };
 			scene.AppendObject(sphere);
-			sphere = new Sphere(new Vector3(15, 6, 30), 6) { Name = "spt3", Material = new Material(new LightStrong(0.8f, 1.0f, 0.8f)) { MetalDegree = 1.0f, IsTransparent = true, RefractiveIndices = 1.5f } };
+			sphere = new Sphere(new Vector3(15, 6, 30), 6) { Name = "spt3", Material = new Material(new Light(0.8f, 1.0f, 0.8f)) { MetalDegree = 1.0f, IsTransparent = true, RefractiveIndices = 1.5f } };
 			scene.AppendObject(sphere);
 			return scene;
 		}

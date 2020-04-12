@@ -33,8 +33,8 @@ namespace Core {
 		/// <param name="ray">光线</param>
 		/// <param name="deep">当前追踪深度</param>
 		/// <returns>颜色，追踪距离</returns>
-		public LightStrong Render(Ray ray) {
-			(LightStrong c, float _) = Light(ray, RenderConfiguration.Configurations.RayTraceDeep, null);
+		public Light Render(Ray ray) {
+			(Light c, float _) = Light(ray, RenderConfiguration.Configurations.RayTraceDeep, null);
 			return c;
 		}
 
@@ -44,8 +44,8 @@ namespace Core {
 		/// <param name="ray">光线</param>
 		/// <param name="deep">当前追踪深度</param>
 		/// <returns>颜色，追踪距离</returns>
-		public (LightStrong, float) Light(Ray ray, int deep, RenderObject callerObj, RenderObject ignore = null) {
-			if (deep < 0 || Objects == null || Objects.Count == 0) return (LightStrong.Dark, 0.0f);
+		public (Light, float) Light(Ray ray, int deep, RenderObject callerObj, RenderObject ignore = null) {
+			if (deep < 0 || Objects == null || Objects.Count == 0) return (Core.Light.Dark, 0.0f);
 			ray = new Ray(ray.Origin, Vector3.Normalize( ray.Direction));
 			float minDistance = float.NaN;
 			Vector3 point = default, normal = default;
@@ -65,13 +65,13 @@ namespace Core {
 				}
 			}
 
-			LightStrong c;
+			Light c;
 			if (minobj != null) {
 				//Console.WriteLine($"rt: {minobj.Name} \t point:{point} \t dir:{ray.Direction} \t caller:{callerObj?.Name}");
 				c = minobj.IntersectLight(point, ray.Direction, normal, deep);
 			}
 			else {
-				c = new LightStrong(0.25f, 0.25f, 0.25f);
+				c = new Light(0.25f, 0.25f, 0.25f);
 			}
 			return (c, minDistance);
 		}

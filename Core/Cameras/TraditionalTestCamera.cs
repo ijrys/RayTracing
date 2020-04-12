@@ -91,7 +91,7 @@ namespace Core.Cameras {
 				for (int l = 0; l < imgw; l++) {
 					float nlp = lenPerPixel * l - lp;
 					float nlpnext = lenPerPixel * (l + 1) - lp;
-					LightStrong color = default;
+					Light color = default;
 					for (int nowsample = 0; nowsample < mutiplySample; nowsample++) {
 						float lptmp = Tools.RandomIn(nlp, nlpnext);
 						float tptmp = Tools.RandomIn(ntp, ntpnext);

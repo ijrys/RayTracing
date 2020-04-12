@@ -6,7 +6,7 @@ using Vector3 = System.Numerics.Vector3;
 
 namespace Core {
 	public static class Tools {
-		public static Random random = new Random();
+		public static Random random = new Random(123);
 
 		public static float Clamp(float o, float min, float max) {
 			if (o < min) return min;

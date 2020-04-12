@@ -44,7 +44,7 @@ namespace Core.Objects {
 		/// <param name="normal"></param>
 		/// <param name="deep"></param>
 		/// <returns></returns>
-		public virtual LightStrong IntersectLight(Vector3 point, Vector3 dir, Vector3 normal, int deep) {
+		public virtual Light IntersectLight(Vector3 point, Vector3 dir, Vector3 normal, int deep) {
 #if RayDebugger
 			SceneDebug Debugger = Scene.debugger;
 			if (Debugger != null) {
@@ -52,7 +52,7 @@ namespace Core.Objects {
 			}
 #endif
 
-			LightStrong returnlight = default;
+			Light returnlight = default;
 			// 发光体返回发光颜色
 			if (Material.LightAble) {
 				returnlight = Material.LightColor;
@@ -71,23 +71,17 @@ namespace Core.Objects {
 				normal = -normal;
 			}
 
-			#region 计算最大光强
-			//{
-			//	float maxLight = Material.LightColor.R;
-			//	maxLight = Math.Max(maxLight, Material.LightColor.G);
-			//	maxLight = Math.Max(maxLight, Material.LightColor.B);
-			//	maxLightStrong *= maxLight;
-			//} 
+			#region 计算追踪光线总数
+			int traceRayNum = RenderConfiguration.Configurations.ReflectSmapingLevel - RenderConfiguration.Configurations.RayTraceDeep + deep;
+			{
+				traceRayNum = (int)(traceRayNum * Material.AMetalDegree);
+				if (traceRayNum < 1) traceRayNum = 1;
+				traceRayNum = traceRayNum * 3 - 2;
+			}
 			#endregion
 
-			// 计算追踪光线总数
-			int traceRayNum = RenderConfiguration.Configurations.ReflectSmapingLevel - RenderConfiguration.Configurations.RayTraceDeep + deep;
-			traceRayNum = (int)(traceRayNum * Material.AMetalDegree);
-			if (traceRayNum < 1) traceRayNum = 1;
-			traceRayNum = traceRayNum * 3 - 2;
-
 			#region 计算折射光
-			LightStrong refractl = default; // 折射光
+			Light refractl = default; // 折射光
 			float refractPower = 0.0f; // 折射光强度
 			if (Material.IsTransparent) {
 				float riindex = Material.RefractiveIndices;
@@ -104,7 +98,8 @@ namespace Core.Objects {
 				traceRayNum -= raycount;
 
 				float randomScale = Material.AMetalDegree * Material.AMetalDegree * 0.5f;
-				raycount = (int)(traceRayNum * randomScale);
+				//raycount = (int)(traceRayNum * randomScale);
+				//raycount = (int)(traceRayNum * Material.AMetalDegree);
 				if (raycount < 1 && refractPower > 0.00001) raycount = 1;
 
 				if (raycount == 0) {
@@ -119,7 +114,7 @@ namespace Core.Objects {
 
 					Ray r = new Ray(point, raydir);
 					//Console.WriteLine('\t' + this.Name + " [refract] : " + r);
-					(LightStrong c, float distance) = Scene.Light(r, deep - 1, this);
+					(Light c, float distance) = Scene.Light(r, deep - 1, this);
 
 					if (IsBackFace) { //内部光线，进行吸收计算
 						float xsl = Math.Log(distance + 1.0f) + 1.0f;
@@ -134,16 +129,25 @@ namespace Core.Objects {
 			#endregion
 
 			#region 计算反射光
-			LightStrong reflectl = default; // 反射光
+			Light reflectl = default; // 反射光
 			{
 				int raycount = traceRayNum;
-				if (raycount < 1 && refractPower < 0.99f) {
-					raycount = 1;
+				if (raycount < 1) {
+					if (refractPower < 0.99f) {
+						raycount = 1;
+					}
+					else {
+						reflectl = Material.BaseColor;
+						goto endReflact;
+					}
 				}
+
 				Vector3 spO;
 				{
-					Vector3 spRO = Tools.Reflect(dir, normal);
-					spO = normal * (1.0f - Material.MetalDegree) + spRO * Material.MetalDegree;
+					//Vector3 spRO = Tools.Reflect(dir, normal);
+					Vector3 spRO = Vector3.Reflect(dir, normal);
+					//spO = normal * (1.0f - Material.MetalDegree) + spRO * Material.MetalDegree;
+					spO = Vector3.Lerp(normal, spRO, Material.MetalDegree);
 				}
 				for (int nsmap = 0; nsmap < raycount; nsmap++) {
 					Vector3 tp = Tools.RandomPointInSphere() * Material.AMetalDegree + spO;
@@ -155,7 +159,7 @@ namespace Core.Objects {
 
 					Ray r = new Ray(point, raydir);
 					//Console.WriteLine('\t' + this.Name + " [reflact] : " + r);
-					(LightStrong c, float _) = Scene.Light(r, deep - 1, this); //, this);
+					(Light c, float _) = Scene.Light(r, deep - 1, this); //, this);
 					reflectl += c;
 				}
 				reflectl /= raycount;
@@ -164,7 +168,7 @@ namespace Core.Objects {
 			#endregion
 
 			returnlight = refractl * refractPower + reflectl * (1.0f - refractPower);
-
+		endReflact:
 		returnPoint:
 #if RayDebugger
 			if (Debugger != null) {
