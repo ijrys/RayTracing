@@ -84,6 +84,7 @@ namespace Test {
 			//Vector3 v1 = new Vector3(1.0f, 1.0f, 1.0f);
 			//Vector3 v2 = new Vector3(2.0f, 2.0f, 0.0f);
 			//Vector128
+			
 		}
 	}
 }

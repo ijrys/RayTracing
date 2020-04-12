@@ -31,7 +31,7 @@ namespace Core.Objects {
 			float x = Tools.Length(ray.Direction.X, ray.Direction.Z);
 			float drty = _y - ray.Origin.Y;
 			float t = drty / ray.Direction.Y;
-			if (float.IsNaN(t) || float.IsInfinity(t) || t < 0) {
+			if (float.IsNaN(t) || t < 0 || float.IsInfinity(t)) {
 				return (float.NegativeInfinity, Vector3.Zero, new Vector3(0.0f, 1.0f, 0.0f));
 			}
 			float distance = (t * ray.Direction).Length();

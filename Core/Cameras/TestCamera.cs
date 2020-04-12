@@ -17,7 +17,7 @@ namespace Core.Cameras {
 		/// <summary>
 		/// 水平视野，角度
 		/// </summary>
-		float _horField = 124;
+		float _horField = 124f;
 
 		/// <summary>
 		/// 相机原点

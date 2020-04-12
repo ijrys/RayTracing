@@ -76,19 +76,21 @@ namespace Core.Cameras {
 			mutiplySample = mutiplySample * 3 - 2;
 
 			int imgw = image.Width, imgh = image.Height;
-			float verLen = imgh * HorLength / imgw;
-			float lp = HorLength / 2, tp = verLen / 2;
+			//float verLen = imgh * HorLength / imgw;
+			//float lp = HorLength / 2, tp = verLen / 2;
+			float lenPerPixel = HorLength / imgw;
+			float lp = HorLength / 2, tp = lenPerPixel * imgh / 2;
 
 			for (int t = 0; t < imgh; t++) {
-				float ntp = tp - verLen / imgh * t;
-				float ntpnext = tp - verLen / imgh * (t + 1);
-				if (t % 10 == 0) {
+				float ntp = tp - lenPerPixel * t;
+				float ntpnext = tp - lenPerPixel * (t + 1);
+				if (t % 16 == 0) {
 					DateTime nowtime = DateTime.Now;
 					Console.WriteLine($"{(nowtime - beginTime).ToString("hh\\:mm\\:ss")} : {t} / {imgh} : {t * 100.0 / imgh:0.0}%, ignore:{Scene.ZXJHL}");
 				}
 				for (int l = 0; l < imgw; l++) {
-					float nlp = _horLength / imgw * l - lp;
-					float nlpnext = _horLength / imgw * (l + 1) - lp;
+					float nlp = lenPerPixel * l - lp;
+					float nlpnext = lenPerPixel * (l + 1) - lp;
 					LightStrong color = default;
 					for (int nowsample = 0; nowsample < mutiplySample; nowsample++) {
 						float lptmp = Tools.RandomIn(nlp, nlpnext);

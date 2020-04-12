@@ -66,7 +66,7 @@ namespace InAWeek {
 
 		static Scene SceneAppendTransparent(Scene scene) {
 			Sphere sphere;
-			sphere = new Sphere(new Vector3(-15, 6, 30), 6) { Name = "spt1", Material = new Material(new LightStrong(0.8f, 1.0f, 0.8f)) { MetalDegree = 0.5f, IsTransparent = true, RefractiveIndices = 1.5f, TransparentIndex = 0.5f } };
+			sphere = new Sphere(new Vector3(-15, 6, 30), 6) { Name = "spt1", Material = new Material(new LightStrong(0.8f, 1.0f, 0.8f)) { MetalDegree = 1.0f, IsTransparent = true, RefractiveIndices = 1.5f, TransparentIndex = 0.5f } };
 			scene.AppendObject(sphere);
 			sphere = new Sphere(new Vector3(0, 6, 30), 6) { Name = "spt2", Material = new Material(new LightStrong(0.8f, 1.0f, 0.8f)) { MetalDegree = 0.75f, IsTransparent = true, RefractiveIndices = 1.5f } };
 			scene.AppendObject(sphere);

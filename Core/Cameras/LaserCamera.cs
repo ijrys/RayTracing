@@ -80,15 +80,20 @@ namespace Core.Cameras {
 #endif
 
 			int imgw = image.Width, imgh = image.Height;
-			float verLen = imgh * HorLength / imgw;
-			float lp = HorLength / 2, tp = verLen / 2;
+			//float verLen = imgh * HorLength / imgw;
+			float lenPerPixel = HorLength / imgw;
+			float lp = HorLength / 2, tp = lenPerPixel * imgh / 2;
 
 			foreach (var point in Points) {
 				int t = point.y, l = point.x;
-				float ntp = tp - verLen / imgh * t;
-				float ntpnext = tp - verLen / imgh * (t + 1);
-				float nlp = _horLength / imgw * l - lp;
-				float nlpnext = _horLength / imgw * (l + 1) - lp;
+				//float ntp = tp - verLen / imgh * t;
+				//float ntpnext = tp - verLen / imgh * (t + 1);
+				//float nlp = _horLength / imgw * l - lp;
+				//float nlpnext = _horLength / imgw * (l + 1) - lp;
+				float ntp = tp - lenPerPixel * t;
+				float ntpnext = tp - lenPerPixel * (t + 1);
+				float nlp = lenPerPixel * l - lp;
+				float nlpnext = lenPerPixel * (l + 1) - lp;
 				LightStrong color = default;
 				float lptmp = (nlp + nlpnext) * 0.5f;
 				float tptmp = (ntp + ntpnext) * 0.5f;

@@ -4,7 +4,7 @@ using System.Text;
 using Vector3 = System.Numerics.Vector3;
 
 namespace Core.Objects {
-	public abstract class SceneObject : ISceneObjectAble {
+	public abstract class SceneObject {
 		protected Scene _scene;
 		protected Vector3 _position;
 

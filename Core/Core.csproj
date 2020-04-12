@@ -6,17 +6,21 @@
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
     <DefineConstants>TRACE;NotRayDebugger</DefineConstants>
+    <PlatformTarget>x64</PlatformTarget>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
     <DefineConstants>TRACE;NotRayDebugger</DefineConstants>
+    <PlatformTarget>x64</PlatformTarget>
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Cameras\TestCamera.cs" />
     <Compile Remove="Colors\Color16.cs" />
     <Compile Remove="Colors\Color8.cs" />
     <Compile Remove="ConstValues.cs" />
     <Compile Remove="Objects\BaseTyprs\IRenderAble.cs" />
+    <Compile Remove="Objects\BaseTyprs\ISceneObjectAble.cs" />
     <Compile Remove="Rotation.cs" />
     <Compile Remove="Vector2.cs" />
     <Compile Remove="Vector3.cs" />
