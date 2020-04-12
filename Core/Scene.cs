@@ -58,7 +58,7 @@ namespace Core {
 				if (obj == ignore) continue;
 				(Float d, Vector3 p, Vector3 n) = obj.IntersectDeep(ray);
 				if (d > 0 && (Float.IsNaN(minDistance) || minDistance > d)) {
-					if (obj == callerObj && d <= 0.001f) {
+					if (obj == callerObj && d <= 0.005f) {
 						//ZXJHL++;
 						continue;
 					}

@@ -73,6 +73,7 @@ namespace Core.Cameras {
 				Debugger.BeginBranch(Origin);
 			}
 #endif
+			DateTime beginTime = DateTime.Now;
 			scene.ReadyToRender();
 			int mutiplySample = RenderConfiguration.Configurations.SmapingLevel;
 			mutiplySample = mutiplySample * 3 - 2;
@@ -85,7 +86,8 @@ namespace Core.Cameras {
 				Float ntp = tp - verLen / imgh * t;
 				Float ntpnext = tp - verLen / imgh * (t + 1);
 				if (t % 10 == 0) {
-					Console.WriteLine($"{t} / {imgh} : {t * 100.0 / imgh:0.0}%, ignore:{Scene.ZXJHL}");
+					DateTime nowtime = DateTime.Now;
+					Console.WriteLine($"{(nowtime - beginTime).ToString("hh\\:mm\\:ss")} : {t} / {imgh} : {t * 100.0 / imgh:0.0}%, ignore:{Scene.ZXJHL}");
 				}
 				for (int l = 0; l < imgw; l++) {
 					Float nlp = _horLength / imgw * l - lp;

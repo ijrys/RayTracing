@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Numerics;
+using System.Runtime.Intrinsics;
 using System.Threading.Tasks;
 
 namespace Test {
@@ -76,8 +78,12 @@ namespace Test {
 			//	GenerateLevel(i);
 			//	Console.WriteLine();
 			//}
-			TaskExecuter();
-			Console.WriteLine("finish");
+			//TaskExecuter();
+			//Console.WriteLine("finish");
+
+			//Vector3 v1 = new Vector3(1.0f, 1.0f, 1.0f);
+			//Vector3 v2 = new Vector3(2.0f, 2.0f, 0.0f);
+			//Vector128
 		}
 	}
 }

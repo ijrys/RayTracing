@@ -38,20 +38,20 @@ namespace InAWeek {
 			ReflectSmapingLevel = 4,
 		};
 
-		static Scene GetScene () {
+		static Scene GetScene() {
 			Scene scene = new Scene();
 #if RayDebugger
 			scene.debugger = new SceneDebug();
 #endif
-			scene.AppendObject(new SkyBox() { Name="sky"});
+			scene.AppendObject(new SkyBox() { Name = "sky" });
 			scene.AppendObject(new Ground(-0.2f) { Name = "ground" });
 			return scene;
 		}
 
-		static Scene SceneAppendMatelTest (Scene scene) {
+		static Scene SceneAppendMatelTest(Scene scene) {
 			Sphere sphere;
 
-			sphere = new Sphere(new Vector3(-40, 30, 65), 10) {Name="sp1", Material = new Material(new LightStrong(0.3f, 1.0f, 1.0f)) };
+			sphere = new Sphere(new Vector3(-40, 30, 65), 10) { Name = "sp1", Material = new Material(new LightStrong(0.3f, 1.0f, 1.0f)) };
 			scene.AppendObject(sphere);
 			sphere = new Sphere(new Vector3(0, 30, 65), 10) { Name = "sp2", Material = new Material(new LightStrong(1.0f, 0.3f, 1.0f)) };
 			scene.AppendObject(sphere);
@@ -85,6 +85,9 @@ namespace InAWeek {
 			//Test();
 			//return;
 
+			DateTime bgTime = DateTime.Now;
+			DateTime nTime;
+
 			Scene scene = GetScene();
 			SceneAppendMatelTest(scene);
 			SceneAppendTransparent(scene);
@@ -92,8 +95,8 @@ namespace InAWeek {
 
 			//Image image = new Image(72, 48);
 			//Image image = new Image(144, 96);
-			Image image = new Image(384, 256);
-			//Image image = new Image(768, 512);
+			//Image image = new Image(384, 256);
+			Image image = new Image(768, 512);
 			//Image image = new Image(1536, 1024);
 
 #if RayDebugger
@@ -103,9 +106,11 @@ namespace InAWeek {
 #else
 			TraditionalTestCamera camera = new TraditionalTestCamera(new Vector3(0.0f, 15.0f, -100.0f), 1.0f, 1.5f);
 #endif
-			RenderConfiguration.Configurations = ReviewConfig;
+			RenderConfiguration.Configurations = OutputConfig;
 
+			Console.WriteLine((DateTime.Now - bgTime).ToString("hh\\:mm\\:ss") + " begin render");
 			camera.Render(image, scene);
+			Console.WriteLine((DateTime.Now - bgTime).ToString("hh\\:mm\\:ss") + " end render");
 
 			string fname = $"A:\\img\\{FileName()}";
 #if RayDebugger
@@ -117,7 +122,7 @@ namespace InAWeek {
 			Console.WriteLine("save to " + fname + ".png");
 			ImageTool.SaveImageToFile(image, fname + ".png", 2);
 
-			Console.WriteLine("finish");
+			Console.WriteLine((DateTime.Now - bgTime).ToString("hh\\:mm\\:ss") + "finish");
 		}
 
 		static void Test() {
