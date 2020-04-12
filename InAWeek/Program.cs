@@ -6,18 +6,12 @@ using Core.Objects;
 using Core.Cameras;
 
 
-#if UseDouble
-using Float = System.Double;
-using Math = System.Math;
-#else
-using Float = System.Single;
-using Math = System.MathF;
-#endif
-
 using Image = Core.LightStrongImage;
 using ImageTool = Core.ImageTools.ImageTools;
 using Core.Materials;
 using Core.Debug;
+
+using Vector3 = System.Numerics.Vector3;
 
 namespace InAWeek {
 	class Program {
@@ -86,7 +80,6 @@ namespace InAWeek {
 			//return;
 
 			DateTime bgTime = DateTime.Now;
-			DateTime nTime;
 
 			Scene scene = GetScene();
 			SceneAppendMatelTest(scene);

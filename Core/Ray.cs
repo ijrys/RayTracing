@@ -2,13 +2,9 @@
 using System.Collections.Generic;
 using System.Text;
 
-#if UseDouble
-using Float = System.Double;
-using Math = System.Math;
-#else
-using Float = System.Single;
 using Math = System.MathF;
-#endif
+
+using Vector3 = System.Numerics.Vector3;
 
 namespace Core {
 	public struct Ray {
@@ -21,10 +17,10 @@ namespace Core {
 			return $"{{o: {Origin}, d: {Direction}}}";
 		}
 
-		public Vector3 this[Float t] {
-			get {
-				return Origin + Direction * t;
-			}
-		}
+		//public Vector3 this[float t] {
+		//	get {
+		//		return Origin + Direction * t;
+		//	}
+		//}
 	}
 }

@@ -2,20 +2,13 @@
 using System.Collections.Generic;
 using System.Text;
 
-#if UseDouble
-using Float = System.Double;
-using Math = System.Math;
-#else
-using Float = System.Single;
-using Math = System.MathF;
-#endif
-
+using Vector3 = System.Numerics.Vector3;
 
 namespace Core {
 	public static class Tools {
 		public static Random random = new Random();
 
-		public static Float Clamp(Float o, Float min, Float max) {
+		public static float Clamp(float o, float min, float max) {
 			if (o < min) return min;
 			if (o > max) return max;
 			return o;
@@ -25,15 +18,15 @@ namespace Core {
 		/// </summary>
 		/// <param name="angle"></param>
 		/// <returns></returns>
-		public static Float Radian(Float angle) {
-			return Math.PI / 180 * angle;
+		public static float Radian(float angle) {
+			return MathF.PI / 180 * angle;
 		}
 
-		public static Float Length(Float x, Float y) {
-			return Math.Sqrt(x * x + y * y);
+		public static float Length(float x, float y) {
+			return MathF.Sqrt(x * x + y * y);
 		}
-		public static Float Length(Float x, Float y, Float z) {
-			return Math.Sqrt(x * x + y * y + z * z);
+		public static float Length(float x, float y, float z) {
+			return MathF.Sqrt(x * x + y * y + z * z);
 		}
 
 		public static Vector3 RandomPointInSphere() {
@@ -43,7 +36,7 @@ namespace Core {
 				y = random.NextDouble() * 2.0 - 1.0;
 				z = random.NextDouble() * 2.0 - 1.0;
 			}
-			Vector3 re = new Vector3((Float)x, (Float)y, (Float)z);
+			Vector3 re = new Vector3((float)x, (float)y, (float)z);
 			return re;
 		}
 
@@ -223,18 +216,18 @@ namespace Core {
 		//	return re;
 		//}
 
-		public static Float LightStrongByDistance(Float distance) {
+		public static float LightStrongByDistance(float distance) {
 			if (distance < 0) return 1.0f;
 			if (distance > 1000) { distance = 1000; };
-			distance = Math.Log10(distance + 1.2f) + 1.1f;
+			distance = MathF.Log10(distance + 1.2f) + 1.1f;
 			distance = 1 / distance;
 			return distance;
 		}
 
-		public static Float RandomIn(Float min, Float max) {
+		public static float RandomIn(float min, float max) {
 			double d = random.NextDouble();
-			return (Float)(min * d + max * (1.0 - d));
-			//return (Float)((min + max) * 0.5);
+			return (float)(min * d + max * (1.0 - d));
+			//return (float)((min + max) * 0.5);
 		}
 
 		/// <summary>
@@ -244,7 +237,7 @@ namespace Core {
 		/// <param name="n"></param>
 		/// <returns></returns>
 		public static Vector3 Reflect(Vector3 dir, Vector3 n) {
-			return dir - dir.Dot(n) * 2.0f * n;
+			return dir - Vector3.Dot(dir, n) * 2.0f * n;
 		}
 
 		/// <summary>
@@ -254,8 +247,8 @@ namespace Core {
 		/// <param name="niOverNt"></param>
 		/// <returns></returns>
 		public static (float, Vector3) Refract(Vector3 dir, Vector3 normal, float niOverNt) {
-			dir = -dir.Normalize();
-			float dt = dir.Dot(normal);
+			dir = -Vector3.Normalize(dir);
+			float dt = Vector3.Dot(dir, normal);
 			float discriminant = 1.0f - niOverNt * niOverNt * (1 - dt * dt);
 			if (discriminant > 0) {
 				float cosGamma = MathF.Sqrt(discriminant);

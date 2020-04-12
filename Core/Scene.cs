@@ -2,15 +2,11 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
-#if UseDouble
-using Float = System.Double;
-using Math = System.Math;
-#else
-using Float = System.Single;
+
 using Math = System.MathF;
-#endif
 
 using Core.Debug;
+using Vector3 = System.Numerics.Vector3;
 
 namespace Core {
 	public class Scene {
@@ -38,7 +34,7 @@ namespace Core {
 		/// <param name="deep">当前追踪深度</param>
 		/// <returns>颜色，追踪距离</returns>
 		public LightStrong Render(Ray ray) {
-			(LightStrong c, Float _) = Light(ray, RenderConfiguration.Configurations.RayTraceDeep, null);
+			(LightStrong c, float _) = Light(ray, RenderConfiguration.Configurations.RayTraceDeep, null);
 			return c;
 		}
 
@@ -48,16 +44,16 @@ namespace Core {
 		/// <param name="ray">光线</param>
 		/// <param name="deep">当前追踪深度</param>
 		/// <returns>颜色，追踪距离</returns>
-		public (LightStrong, Float) Light(Ray ray, int deep, RenderObject callerObj, RenderObject ignore = null) {
+		public (LightStrong, float) Light(Ray ray, int deep, RenderObject callerObj, RenderObject ignore = null) {
 			if (deep < 0 || Objects == null || Objects.Count == 0) return (LightStrong.Dark, 0.0f);
-			ray = new Ray(ray.Origin, ray.Direction.Normalize());
-			Float minDistance = Float.NaN;
+			ray = new Ray(ray.Origin, Vector3.Normalize( ray.Direction));
+			float minDistance = float.NaN;
 			Vector3 point = default, normal = default;
 			RenderObject minobj = null;
 			foreach (RenderObject obj in objects) {
 				if (obj == ignore) continue;
-				(Float d, Vector3 p, Vector3 n) = obj.IntersectDeep(ray);
-				if (d > 0 && (Float.IsNaN(minDistance) || minDistance > d)) {
+				(float d, Vector3 p, Vector3 n) = obj.IntersectDeep(ray);
+				if (d > 0 && (float.IsNaN(minDistance) || minDistance > d)) {
 					if (obj == callerObj && d <= 0.005f) {
 						//ZXJHL++;
 						continue;

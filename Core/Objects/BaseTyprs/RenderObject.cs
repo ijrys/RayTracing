@@ -1,13 +1,10 @@
 ﻿using Core.Debug;
 using Core.Materials;
 using System;
-#if UseDouble
-using Float = System.Double;
-using Math = System.Math;
-#else
-using Float = System.Single;
+
 using Math = System.MathF;
-#endif
+
+using Vector3 = System.Numerics.Vector3;
 
 namespace Core.Objects {
 	public abstract class RenderObject : SceneObject { //, IRenderAble {
@@ -32,13 +29,13 @@ namespace Core.Objects {
 		/// </summary>
 		/// <param name="ray"></param>
 		/// <returns>距离，焦点，焦平面法线</returns>
-		public abstract (Float, Vector3, Vector3) IntersectDeep(Ray ray);
+		public abstract (float, Vector3, Vector3) IntersectDeep(Ray ray);
 		/// <summary>
 		/// 内相交信息，用于计算折射光线的出射点
 		/// </summary>
 		/// <param name="ray"></param>
 		/// <returns>距离，焦点，焦平面法线</returns>
-		public abstract (Float, Vector3, Vector3) InterIntersect(Ray ray);
+		public abstract (float, Vector3, Vector3) InterIntersect(Ray ray);
 
 		/// <summary>
 		/// 相交点辐射光
@@ -67,16 +64,16 @@ namespace Core.Objects {
 				goto returnPoint;
 			}
 
-			dir = dir.Normalize();
+			dir = Vector3.Normalize(dir);
 			bool IsBackFace = false;
-			if (dir.Dot(normal) > 0) { // 背面
+			if (Vector3.Dot(dir, normal) > 0) { // 背面
 				IsBackFace = true;
 				normal = -normal;
 			}
 
 			#region 计算最大光强
 			//{
-			//	Float maxLight = Material.LightColor.R;
+			//	float maxLight = Material.LightColor.R;
 			//	maxLight = Math.Max(maxLight, Material.LightColor.G);
 			//	maxLight = Math.Max(maxLight, Material.LightColor.B);
 			//	maxLightStrong *= maxLight;
@@ -122,10 +119,10 @@ namespace Core.Objects {
 
 					Ray r = new Ray(point, raydir);
 					//Console.WriteLine('\t' + this.Name + " [refract] : " + r);
-					(LightStrong c, Float distance) = Scene.Light(r, deep - 1, this);
+					(LightStrong c, float distance) = Scene.Light(r, deep - 1, this);
 
 					if (IsBackFace) { //内部光线，进行吸收计算
-						Float xsl = Math.Log(distance + 1.0f) + 1.0f;
+						float xsl = Math.Log(distance + 1.0f) + 1.0f;
 						refractl *= Material.BaseColor / xsl;
 					}
 					refractl += c;
@@ -140,7 +137,7 @@ namespace Core.Objects {
 			LightStrong reflectl = default; // 反射光
 			{
 				int raycount = traceRayNum;
-				if(raycount < 1 && refractPower < 0.99f) {
+				if (raycount < 1 && refractPower < 0.99f) {
 					raycount = 1;
 				}
 				Vector3 spO;
@@ -158,7 +155,7 @@ namespace Core.Objects {
 
 					Ray r = new Ray(point, raydir);
 					//Console.WriteLine('\t' + this.Name + " [reflact] : " + r);
-					(LightStrong c, Float _) = Scene.Light(r, deep - 1, this); //, this);
+					(LightStrong c, float _) = Scene.Light(r, deep - 1, this); //, this);
 					reflectl += c;
 				}
 				reflectl /= raycount;

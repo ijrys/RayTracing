@@ -2,47 +2,44 @@
 using System.Collections.Generic;
 using System.Text;
 
-#if UseDouble
-using Float = System.Double;
-using Math = System.Math;
-#else
-using Float = System.Single;
+
 using Math = System.MathF;
-#endif
+
+using Vector3 = System.Numerics.Vector3;
 
 namespace Core.Objects {
 	public class Ground : RenderObject {
 
 		public override Vector3 Position {
 			get => _position;
-			set => _position = new Vector3(ConstValues.Zero, value.Y, ConstValues.Zero);
+			set => _position = new Vector3(0.0f, value.Y, 0.0f);
 		}
 
 		public Ground() {
 		}
-		public Ground(Float y) : base(new Vector3(ConstValues.Zero, y, ConstValues.Zero)) {
+		public Ground(float y) : base(new Vector3(0.0f, y, 0.0f)) {
 		}
 		public Ground(Materials.Material material) {
 			Material = material;
 		}
-		public Ground(Float y, Materials.Material material) : base(new Vector3(ConstValues.Zero, y, ConstValues.Zero)) {
+		public Ground(float y, Materials.Material material) : base(new Vector3(0.0f, y, 0.0f)) {
 			Material = material;
 		}
 
-		public override (Float, Vector3, Vector3) IntersectDeep(Ray ray) {
-			Float _y = _position.Y;
-			Float x = Tools.Length(ray.Direction.X, ray.Direction.Z);
-			Float drty = _y - ray.Origin.Y;
-			Float t = drty / ray.Direction.Y;
-			if (Float.IsNaN(t) || Float.IsInfinity(t) || t < 0) {
-				return (Float.NegativeInfinity, Vector3.Zero, new Vector3(0.0f, 1.0f, 0.0f));
+		public override (float, Vector3, Vector3) IntersectDeep(Ray ray) {
+			float _y = _position.Y;
+			float x = Tools.Length(ray.Direction.X, ray.Direction.Z);
+			float drty = _y - ray.Origin.Y;
+			float t = drty / ray.Direction.Y;
+			if (float.IsNaN(t) || float.IsInfinity(t) || t < 0) {
+				return (float.NegativeInfinity, Vector3.Zero, new Vector3(0.0f, 1.0f, 0.0f));
 			}
-			Float distance = (t * ray.Direction).Length();
+			float distance = (t * ray.Direction).Length();
 			return (distance, ray.Direction * t + ray.Origin, new Vector3(0.0f, 1.0f, 0.0f));
 		}
 
-		public override (Float, Vector3, Vector3) InterIntersect(Ray ray) {
-			return (Float.NegativeInfinity, Vector3.Zero, Vector3.Zero);
+		public override (float, Vector3, Vector3) InterIntersect(Ray ray) {
+			return (float.NegativeInfinity, Vector3.Zero, Vector3.Zero);
 		}
 	}
 }

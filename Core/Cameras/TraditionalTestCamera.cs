@@ -3,14 +3,11 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-#if UseDouble
-using Float = System.Double;
-using Math = System.Math;
-#else
-using Float = System.Single;
+
 using Math = System.MathF;
-#endif
+
 using Image = Core.LightStrongImage;
+using Vector3 = System.Numerics.Vector3;
 
 namespace Core.Cameras {
 	public class TraditionalTestCamera {
@@ -19,11 +16,11 @@ namespace Core.Cameras {
 		/// <summary>
 		/// 胶片z偏移
 		/// </summary>
-		Float _zOffset = 1.0f;
+		float _zOffset = 1.0f;
 		/// <summary>
 		/// 水平视野，角度
 		/// </summary>
-		Float _horLength = 3.464f;
+		float _horLength = 3.464f;
 
 		/// <summary>
 		/// 相机原点
@@ -33,7 +30,7 @@ namespace Core.Cameras {
 		/// <summary>
 		/// 胶片水平宽度
 		/// </summary>
-		public Float HorLength {
+		public float HorLength {
 			get => _horLength;
 			set {
 				_horLength = value;
@@ -42,7 +39,7 @@ namespace Core.Cameras {
 		/// <summary>
 		/// 胶片距汇点位置
 		/// </summary>
-		public Float ZOffset {
+		public float ZOffset {
 			get => _zOffset;
 			set {
 				if (value < 0.5f) {
@@ -59,7 +56,7 @@ namespace Core.Cameras {
 		public TraditionalTestCamera(Vector3 origin) {
 			Origin = origin;
 		}
-		public TraditionalTestCamera(Vector3 origin, Float horLength, Float zOffset) {
+		public TraditionalTestCamera(Vector3 origin, float horLength, float zOffset) {
 			Origin = origin;
 			HorLength = horLength;
 			ZOffset = zOffset;
@@ -79,23 +76,23 @@ namespace Core.Cameras {
 			mutiplySample = mutiplySample * 3 - 2;
 
 			int imgw = image.Width, imgh = image.Height;
-			Float verLen = imgh * HorLength / imgw;
-			Float lp = HorLength / 2, tp = verLen / 2;
+			float verLen = imgh * HorLength / imgw;
+			float lp = HorLength / 2, tp = verLen / 2;
 
 			for (int t = 0; t < imgh; t++) {
-				Float ntp = tp - verLen / imgh * t;
-				Float ntpnext = tp - verLen / imgh * (t + 1);
+				float ntp = tp - verLen / imgh * t;
+				float ntpnext = tp - verLen / imgh * (t + 1);
 				if (t % 10 == 0) {
 					DateTime nowtime = DateTime.Now;
 					Console.WriteLine($"{(nowtime - beginTime).ToString("hh\\:mm\\:ss")} : {t} / {imgh} : {t * 100.0 / imgh:0.0}%, ignore:{Scene.ZXJHL}");
 				}
 				for (int l = 0; l < imgw; l++) {
-					Float nlp = _horLength / imgw * l - lp;
-					Float nlpnext = _horLength / imgw * (l + 1) - lp;
+					float nlp = _horLength / imgw * l - lp;
+					float nlpnext = _horLength / imgw * (l + 1) - lp;
 					LightStrong color = default;
 					for (int nowsample = 0; nowsample < mutiplySample; nowsample++) {
-						Float lptmp = Tools.RandomIn(nlp, nlpnext);
-						Float tptmp = Tools.RandomIn(ntp, ntpnext);
+						float lptmp = Tools.RandomIn(nlp, nlpnext);
+						float tptmp = Tools.RandomIn(ntp, ntpnext);
 						Vector3 d = new Vector3(lptmp, tptmp, _zOffset);
 #if RayDebugger
 						if (Debugger != null) {

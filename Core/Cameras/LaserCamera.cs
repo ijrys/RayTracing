@@ -3,14 +3,10 @@ using System.Collections.Generic;
 using System.Text;
 using Core.Debug;
 
-#if UseDouble
-using Float = System.Double;
-using Math = System.Math;
-#else
-using Float = System.Single;
 using Math = System.MathF;
-#endif
 using Image = Core.LightStrongImage;
+
+using Vector3 = System.Numerics.Vector3;
 
 namespace Core.Cameras {
 	public class LaserCamera {
@@ -27,11 +23,11 @@ namespace Core.Cameras {
 		/// <summary>
 		/// 胶片z偏移
 		/// </summary>
-		Float _zOffset = 1.0f;
+		float _zOffset = 1.0f;
 		/// <summary>
 		/// 水平视野，角度
 		/// </summary>
-		Float _horLength = 3.464f;
+		float _horLength = 3.464f;
 
 		/// <summary>
 		/// 相机原点
@@ -41,7 +37,7 @@ namespace Core.Cameras {
 		/// <summary>
 		/// 胶片水平宽度
 		/// </summary>
-		public Float HorLength {
+		public float HorLength {
 			get => _horLength;
 			set {
 				_horLength = value;
@@ -50,7 +46,7 @@ namespace Core.Cameras {
 		/// <summary>
 		/// 胶片距汇点位置
 		/// </summary>
-		public Float ZOffset {
+		public float ZOffset {
 			get => _zOffset;
 			set {
 				if (value < 0.5f) {
@@ -67,7 +63,7 @@ namespace Core.Cameras {
 		public LaserCamera(Vector3 origin) {
 			Origin = origin;
 		}
-		public LaserCamera(Vector3 origin, Float horLength, Float zOffset) {
+		public LaserCamera(Vector3 origin, float horLength, float zOffset) {
 			Origin = origin;
 			HorLength = horLength;
 			ZOffset = zOffset;
@@ -84,18 +80,18 @@ namespace Core.Cameras {
 #endif
 
 			int imgw = image.Width, imgh = image.Height;
-			Float verLen = imgh * HorLength / imgw;
-			Float lp = HorLength / 2, tp = verLen / 2;
+			float verLen = imgh * HorLength / imgw;
+			float lp = HorLength / 2, tp = verLen / 2;
 
 			foreach (var point in Points) {
 				int t = point.y, l = point.x;
-				Float ntp = tp - verLen / imgh * t;
-				Float ntpnext = tp - verLen / imgh * (t + 1);
-				Float nlp = _horLength / imgw * l - lp;
-				Float nlpnext = _horLength / imgw * (l + 1) - lp;
+				float ntp = tp - verLen / imgh * t;
+				float ntpnext = tp - verLen / imgh * (t + 1);
+				float nlp = _horLength / imgw * l - lp;
+				float nlpnext = _horLength / imgw * (l + 1) - lp;
 				LightStrong color = default;
-				Float lptmp = (nlp + nlpnext) * 0.5f;
-				Float tptmp = (ntp + ntpnext) * 0.5f;
+				float lptmp = (nlp + nlpnext) * 0.5f;
+				float tptmp = (ntp + ntpnext) * 0.5f;
 				Vector3 d = new Vector3(lptmp, tptmp, _zOffset);
 #if RayDebugger
 				if (Debugger != null) {

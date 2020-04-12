@@ -15,8 +15,11 @@
   <ItemGroup>
     <Compile Remove="Colors\Color16.cs" />
     <Compile Remove="Colors\Color8.cs" />
+    <Compile Remove="ConstValues.cs" />
     <Compile Remove="Objects\BaseTyprs\IRenderAble.cs" />
     <Compile Remove="Rotation.cs" />
+    <Compile Remove="Vector2.cs" />
+    <Compile Remove="Vector3.cs" />
   </ItemGroup>
 
   <ItemGroup>

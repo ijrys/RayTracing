@@ -4,13 +4,10 @@ using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using System.Text;
 
-#if UseDouble
-using Float = System.Double;
-using Math = System.Math;
-#else
-using Float = System.Single;
+
 using Math = System.MathF;
-#endif
+
+using Vector3 = System.Numerics.Vector3;
 
 namespace Core.Objects {
 	public class SkyBox : RenderObject {
@@ -26,16 +23,16 @@ namespace Core.Objects {
 			if (dir.Y > 0.94f) {
 				return LightStrong.White;
 			}
-			Float y = 0.5f * (dir.Y + 1.0f);
+			float y = 0.5f * (dir.Y + 1.0f);
 			return (1.0f - y) * LightStrong.White + y * new LightStrong(0.51f, 0.68f, 0.95f);
 		}
 
-		public override (Float, Vector3, Vector3) IntersectDeep(Ray ray) {
-			return (Float.PositiveInfinity, ray.Origin + ray.Direction, ray.Direction);
+		public override (float, Vector3, Vector3) IntersectDeep(Ray ray) {
+			return (float.PositiveInfinity, ray.Origin + ray.Direction, ray.Direction);
 		}
 
 		public override (float, Vector3, Vector3) InterIntersect(Ray ray) {
-			return (Float.NegativeInfinity, Vector3.Zero, Vector3.Zero);
+			return (float.NegativeInfinity, Vector3.Zero, Vector3.Zero);
 		}
 	}
 }
